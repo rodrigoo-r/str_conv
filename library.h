@@ -63,5 +63,4 @@ static inline void encode_utf8_sb(uint32_t codepoint, string_builder_t *builder)
     }
 }
 
-
 #endif //FLUENT_LIBC_STR_CONV_LIBRARY_H
