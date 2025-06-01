@@ -12,6 +12,29 @@
 #define FLUENT_LIBC_STR_CONV_LIBRARY_H
 
 // ============= FLUENT LIB C =============
+// Unicode & Escape Sequence Conversion
+// ----------------------------------------
+// Provides tools to convert string escape sequences into real UTF-8,
+// including support for `\n`, `\t`, `\"`, `\\`, `\uXXXX`, and surrogate pairs.
+//
+// Functions:
+// - `parse_hex4(str)`: Parses 4-char hex string to int
+// - `encode_utf8_sb(codepoint, builder)`: Appends UTF-8 bytes of codepoint to a string builder
+// - `convert_escapes_to_utf8_sb(input)`: Parses input string with escape sequences and returns UTF-8 string
+//
+// Highlights:
+// Supports full UTF-16 surrogate decoding
+// Invalid escapes copied as-is
+// Works with `string_builder_t` (from Fluent Lib C)
+//
+// Example:
+// ----------------------------------------
+//   const char* json_escaped = "Hello \\uD83D\\uDE03!"; // "Hello 😃!"
+//   char* utf8 = convert_escapes_to_utf8_sb(json_escaped);
+//   printf("%s\n", utf8);
+//   free(utf8);
+//
+
 #ifndef FLUENT_LIBC_RELEASE
 #   include <string_builder.h> // fluent_libc
 #else
