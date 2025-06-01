@@ -39,4 +39,23 @@ static inline int parse_hex4(const char *str) {
     return val;
 }
 
+static inline void encode_utf8_sb(uint32_t codepoint, string_builder_t *builder) {
+    if (codepoint <= 0x7F) {
+        write_char_string_builder(builder, codepoint);
+    } else if (codepoint <= 0x7FF) {
+        write_char_string_builder(builder, 0xC0 | (codepoint >> 6));
+        write_char_string_builder(builder, 0x80 | (codepoint & 0x3F));
+    } else if (codepoint <= 0xFFFF) {
+        write_char_string_builder(builder, 0xE0 | (codepoint >> 12));
+        write_char_string_builder(builder, 0x80 | ((codepoint >> 6) & 0x3F));
+        write_char_string_builder(builder, 0x80 | (codepoint & 0x3F));
+    } else if (codepoint <= 0x10FFFF) {
+        write_char_string_builder(builder, 0xF0 | (codepoint >> 18));
+        write_char_string_builder(builder, 0x80 | ((codepoint >> 12) & 0x3F));
+        write_char_string_builder(builder, 0x80 | ((codepoint >> 6) & 0x3F));
+        write_char_string_builder(builder, 0x80 | (codepoint & 0x3F));
+    }
+}
+
+
 #endif //FLUENT_LIBC_STR_CONV_LIBRARY_H
