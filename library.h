@@ -45,6 +45,19 @@ static inline int parse_hex4(const char *str) {
     return val;
 }
 
+/**
+ * Encodes a Unicode code point as UTF-8 and appends the bytes to a string builder.
+ *
+ * \param codepoint The Unicode code point to encode (must be in range 0x0 to 0x10FFFF).
+ * \param builder Pointer to a string_builder_t where the UTF-8 bytes will be appended.
+ *
+ * The function writes 1 to 4 bytes to the string builder, depending on the value of the code point:
+ *   - 1 byte for code points <= 0x7F
+ *   - 2 bytes for code points <= 0x7FF
+ *   - 3 bytes for code points <= 0xFFFF
+ *   - 4 bytes for code points <= 0x10FFFF
+ * No output is produced for invalid code points (> 0x10FFFF).
+ */
 static inline void encode_utf8_sb(uint32_t codepoint, string_builder_t *builder) {
     if (codepoint <= 0x7F) {
         write_char_string_builder(builder, codepoint);
