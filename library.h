@@ -58,7 +58,7 @@ static inline int parse_hex4(const char *str) {
  *   - 4 bytes for code points <= 0x10FFFF
  * No output is produced for invalid code points (> 0x10FFFF).
  */
-static inline void encode_utf8_sb(uint32_t codepoint, string_builder_t *builder) {
+static inline void encode_utf8_sb(const uint32_t codepoint, string_builder_t *builder) {
     if (codepoint <= 0x7F) {
         write_char_string_builder(builder, codepoint);
     } else if (codepoint <= 0x7FF) {
