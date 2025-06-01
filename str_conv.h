@@ -35,6 +35,12 @@
 //   free(utf8);
 //
 
+// ============= FLUENT LIB C++ =============
+#if defined(__cplusplus)
+extern "C"
+{
+#endif
+
 #ifndef FLUENT_LIBC_RELEASE
 #   include <string_builder.h> // fluent_libc
 #else
@@ -166,5 +172,9 @@ static inline char *convert_escapes_to_utf8_sb(const char *input) {
     return collect_string_builder_no_copy(&builder);
 }
 
+// ============= FLUENT LIB C++ =============
+#if defined(__cplusplus)
+}
+#endif
 
 #endif //FLUENT_LIBC_STR_CONV_LIBRARY_H
