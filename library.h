@@ -76,6 +76,19 @@ static inline void encode_utf8_sb(uint32_t codepoint, string_builder_t *builder)
     }
 }
 
+/**
+ * Converts escape sequences in a string to their UTF-8 encoded representations using a string builder.
+ *
+ * Supported escape sequences:
+ *   - \n, \r, \t, \\, \"
+ *   - \uXXXX (Unicode code point in hexadecimal)
+ *   - Surrogate pairs: \uD800-\uDBFF followed by \uDC00-\uDFFF are combined into a single code point.
+ *
+ * For invalid or unknown escape sequences, the function copies the characters literally.
+ *
+ * \param input Pointer to a null-terminated string containing escape sequences.
+ * \return A newly allocated UTF-8 encoded string with escapes converted. The caller is responsible for freeing the returned string.
+ */
 static inline char *convert_escapes_to_utf8_sb(const char *input) {
     string_builder_t builder;
     init_string_builder(&builder, 64, 1.5); // start with 64 bytes, 1.5 growth factor
