@@ -11,6 +11,13 @@
 #ifndef FLUENT_LIBC_STR_CONV_LIBRARY_H
 #define FLUENT_LIBC_STR_CONV_LIBRARY_H
 
+// ============= FLUENT LIB C =============
+#ifndef FLUENT_LIBC_RELEASE
+#   include <string_builder.h> // fluent_libc
+#else
+#   include <fluent/string_builder/string_builder.h> // fluent_libc
+#endif
+
 /**
  * Parses a 4-character hexadecimal string and returns its integer value.
  *
