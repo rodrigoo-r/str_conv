@@ -76,4 +76,61 @@ static inline void encode_utf8_sb(uint32_t codepoint, string_builder_t *builder)
     }
 }
 
+static inline char *convert_escapes_to_utf8_sb(const char *input) {
+    string_builder_t builder;
+    init_string_builder(&builder, 64, 1.5); // start with 64 bytes, 1.5 growth factor
+
+    const char *p = input;
+    while (*p) {
+        if (p[0] == '\\') {
+            switch (p[1]) {
+                case 'n': write_char_string_builder(&builder, '\n'); p += 2; break;
+                case 'r': write_char_string_builder(&builder, '\r'); p += 2; break;
+                case 't': write_char_string_builder(&builder, '\t'); p += 2; break;
+                case '\\': write_char_string_builder(&builder, '\\'); p += 2; break;
+                case '"': write_char_string_builder(&builder, '"'); p += 2; break;
+                case 'u':
+                    if (isxdigit(p[2]) && isxdigit(p[3]) &&
+                        isxdigit(p[4]) && isxdigit(p[5])) {
+
+                        int code1 = parse_hex4(p + 2);
+                        if (code1 >= 0xD800 && code1 <= 0xDBFF &&  // high surrogate
+                            p[6] == '\\' && p[7] == 'u' &&
+                            isxdigit(p[8]) && isxdigit(p[9]) &&
+                            isxdigit(p[10]) && isxdigit(p[11])) {
+
+                            int code2 = parse_hex4(p + 8);
+                            if (code2 >= 0xDC00 && code2 <= 0xDFFF) { // low surrogate
+                                uint32_t high = code1 - 0xD800;
+                                uint32_t low = code2 - 0xDC00;
+                                uint32_t codepoint = (high << 10) + low + 0x10000;
+                                encode_utf8_sb(codepoint, &builder);
+                                p += 12;
+                                break;
+                            }
+                        }
+
+                        // single \uXXXX
+                        encode_utf8_sb(code1, &builder);
+                        p += 6;
+                        break;
+                    }
+                    // invalid escape, just copy literally
+                    write_char_string_builder(&builder, *p++);
+                    break;
+                default:
+                    // unknown escape, copy literally '\' and next char
+                    write_char_string_builder(&builder, *p++);
+                    if (*p) write_char_string_builder(&builder, *p++);
+                    break;
+            }
+        } else {
+            write_char_string_builder(&builder, *p++);
+        }
+    }
+
+    return collect_string_builder_no_copy(&builder);
+}
+
+
 #endif //FLUENT_LIBC_STR_CONV_LIBRARY_H
