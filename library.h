@@ -18,6 +18,12 @@
 #   include <fluent/string_builder/string_builder.h> // fluent_libc
 #endif
 
+// ============= INCLUDES =============
+#include <stdint.h>
+#include <stdlib.h>
+#include <string.h>
+#include <ctype.h>
+
 /**
  * Parses a 4-character hexadecimal string and returns its integer value.
  *
