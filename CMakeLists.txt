@@ -5,7 +5,7 @@ project(str_conv C)
 
 set(CMAKE_C_STANDARD 11)
 
-add_library(str_conv STATIC library.c)
+add_library(str_conv STATIC str_conv.c)
 
 if(NOT FLUENT_LIBC_RELEASE) # Manually add libraries only if not in release mode
     FetchContent_Declare(
