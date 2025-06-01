@@ -8,8 +8,7 @@
  * under certain conditions; type show c' for details.
 */
 
-#ifndef STR_CONV_LIBRARY_H
-#define STR_CONV_LIBRARY_H
+#ifndef FLUENT_LIBC_STR_CONV_LIBRARY_H
+#define FLUENT_LIBC_STR_CONV_LIBRARY_H
 
-
-#endif //STR_CONV_LIBRARY_H
+#endif //FLUENT_LIBC_STR_CONV_LIBRARY_H
