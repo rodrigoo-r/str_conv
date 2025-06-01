@@ -104,17 +104,17 @@ static inline char *convert_escapes_to_utf8_sb(const char *input) {
                     if (isxdigit(p[2]) && isxdigit(p[3]) &&
                         isxdigit(p[4]) && isxdigit(p[5])) {
 
-                        int code1 = parse_hex4(p + 2);
+                        const int code1 = parse_hex4(p + 2);
                         if (code1 >= 0xD800 && code1 <= 0xDBFF &&  // high surrogate
                             p[6] == '\\' && p[7] == 'u' &&
                             isxdigit(p[8]) && isxdigit(p[9]) &&
                             isxdigit(p[10]) && isxdigit(p[11])) {
 
-                            int code2 = parse_hex4(p + 8);
+                            const int code2 = parse_hex4(p + 8);
                             if (code2 >= 0xDC00 && code2 <= 0xDFFF) { // low surrogate
-                                uint32_t high = code1 - 0xD800;
-                                uint32_t low = code2 - 0xDC00;
-                                uint32_t codepoint = (high << 10) + low + 0x10000;
+                                const uint32_t high = code1 - 0xD800;
+                                const uint32_t low = code2 - 0xDC00;
+                                const uint32_t codepoint = (high << 10) + low + 0x10000;
                                 encode_utf8_sb(codepoint, &builder);
                                 p += 12;
                                 break;
